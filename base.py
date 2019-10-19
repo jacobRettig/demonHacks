@@ -22,21 +22,26 @@ def mainPage():
     <head>
       <title>Chicago Transit Impacts</title>
       <meta charset="UTF-8">
-      <style>
-      </style>
     </head>
-    <body>
-      <h1>Chicago Transit Impacts</h1>{}
+    <body style="background-color:#DCC7AA;">
+      <h1 style="color:#687A8F;">Chicago Transit Impacts</h1>{}
     </body>
-  </html>'''.format(reduce(lambda a,b:'{}\n{}'.format(a, b()), questions, ''))
+  </html>'''.format(reduce(lambda a,b:'{}\n\r{}'.format(a, b()), questions, '') )
   return content
+
+@app.route('/styles.css')
+def getStylesSheet():
+  data = None
+  with open('styles.css') as file0:
+    data = file0.read()
+  return data
 
 
 '''Template to generate section HTML
   Graph will be a matplotlib object, this function will handle loading the graph'''
 def genSubSection(subtitle, question, auxInfo, graph=None):
-  content = '''<hr/>
-  <h2>{}</h2>
+  content = '''<hr/> 
+  <h2 style="color:#F7882F;">{}</h2>
   <p>{}</p>
   <img alt="Images not yet implemented" />
   <p>{}</p>'''.format(subtitle, question, auxInfo)
