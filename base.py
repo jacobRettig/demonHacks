@@ -10,6 +10,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 
+from hack import totalCTABus, totalCTATrain
 
 
 app = Flask(__name__)
@@ -28,7 +29,7 @@ def getQuestionGraph(data):
   fig, axs = plt.subplots()
   axs.hist(x=data['Month'], weights=data['Total Passing Vehicle Volume'], bins=12)
   #plt.xticks(range(1, 13), ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'])
-  axs.get_xaxis().set_ticks(range(1,14))
+  axs.get_xaxis().set_ticks(range(1,13))
   axs.get_xaxis().set_ticklabels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec', '.'])
   axs.get_yaxis().set_ticklabels([])
   axs.set_title('Amount of Vehicles on Street by Month')
@@ -38,6 +39,11 @@ def getCarQuestion():
   data = getQuestionData()
   fig = getQuestionGraph(data)
   return genSubSection('Vehicle Usage', 'What are the most and least popular months for vehicle usage in Chicago?', '', fig)
+
+def getBusTrainQuestion():
+  numBuses = totalCTABus()
+  numTrains = totalCTATrain()
+  return genSubSection('Current Bus and Train Usage', 'How many buses and trains are in current use and what\'s their environmental impact?', 'There are {} CTA bus{} and {} CTA train{} in service as of this moment.'.format(numBuses, '' if numBuses == 1 else 'es', numTrains, '' if numTrains == 1 else 's'))
 
 '''First example subsection'''
 def getTestQuestion():
@@ -69,7 +75,7 @@ def figToResponse(fig):
 
 
 '''List of all functions that generate content'''
-questions = [getCarQuestion]
+questions = [getCarQuestion, getBusTrainQuestion]
 questionNames = list()
 
 '''Global chart object'''
